@@ -52,6 +52,7 @@ class App extends Component {
   };
   render() {
     const { temperatura, humedad, viento } = this.state;
+    console.log("hola");
     return (
       <div className="App">
         <Router>

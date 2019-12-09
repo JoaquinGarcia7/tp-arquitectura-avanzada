@@ -2,6 +2,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+
 class Login extends Component {
     constructor(props){
         super(props);
@@ -73,3 +74,31 @@ const style = {
     margin: 15,
 };
 export default Login;
+/*
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+    <h2 class="active"> Sign In </h2>
+    <h2 class="inactive underlineHover">Sign Up </h2>
+
+    <!-- Icon -->
+    <div class="fadeIn first">
+      <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="User Icon" />
+    </div>
+
+    <!-- Login Form -->
+    <form>
+      <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">
+      <input type="text" id="password" class="fadeIn third" name="login" placeholder="password">
+      <input type="submit" class="fadeIn fourth" value="Log In">
+    </form>
+
+    <!-- Remind Passowrd -->
+    <div id="formFooter">
+      <a class="underlineHover" href="#">Forgot Password?</a>
+    </div>
+
+  </div>
+</div>
+
+*/

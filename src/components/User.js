@@ -16,7 +16,7 @@ class UserHome extends Component {
         </div>
         <div className="container">
           <p>Humedad</p>
-
+          
           <div className="div-valor">
             <p>{this.props.humedad} %</p>
           </div>

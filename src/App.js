@@ -28,7 +28,8 @@ class App extends Component {
       vientoMax: 0,
       coefT: 0.445,
       coefH: 0.2,
-      coefV: 0.1
+      coefV: 0.1,
+      sensor: []
     };
   }
 
@@ -44,7 +45,19 @@ class App extends Component {
         viento: data.Viento * coefV
       });
     });
+    /*try {
+      const sensor = await fetch("/");
+      console.log(sensor);
+      const r = JSON.stringify(sensor.body);
+      console.log(JSON.parse(r));
+      //console.log(JSON.parse(sensor));
+      //let sensor = await r.json();
+      //this.setState({ sensor });
+    } catch (error) {
+      console.log(error);
+    }*/
   }
+
   handleChange = (name, value) => {
     this.setState({
       [name]: value
@@ -52,7 +65,7 @@ class App extends Component {
   };
   render() {
     const { temperatura, humedad, viento } = this.state;
-    console.log("hola");
+    console.log(this.state.sensor);
     return (
       <div className="App">
         <Router>

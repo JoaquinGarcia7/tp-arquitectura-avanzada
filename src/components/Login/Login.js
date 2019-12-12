@@ -1,7 +1,14 @@
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
+import react from "react";
 import TextField from 'material-ui/TextField';
+
+export class Login extends React.Component{
+    constructor(props){
+        super(props);
+    }
+}
 
 class Login extends Component {
     constructor(props){
@@ -13,7 +20,7 @@ class Login extends Component {
     }
 }
 
-handleClick(event){
+handleClick(event) {
     var apiBaseUrl = "http://localhost:4000/api/";
     var self = this;
     var payload={
@@ -43,11 +50,36 @@ handleClick(event){
     });
 }
 
-
-
-render() {
+render() { 
     return (
-        <div>
+        <div className = "base-container"
+        ref={this.props.containerRef}>
+            <div className="header">Register</div>
+
+            <div className="content">
+                <div className="image">
+                    <img src = {loginImg} />
+                </div>
+                <div className="form">
+                    <div className="form-group">
+                        <TextField
+                            hintText="Ingrese su usuario"
+                            floatingLabelText="Username"
+                            onChange = { (event, newValue) => this.setState({username:newValue})}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <TextField
+                            hintText="Ingrese su contraseña"
+                            floatingLabelText="Password"
+                            onChange = {(event,newValue) => this.setState({password:newValue})}
+                        />
+                    </div>
+                </div>
+                
+
+
+            </div>
             <MuiThemeProvider>
                 <div>
                     <AppBar title="Login" />
@@ -57,12 +89,12 @@ render() {
                         onChange = {(event,newValue) => this.setState({username:newValue})}
                     />
                     <br/>
-                        <TextField
-                            type="password"
-                            hintText="Enter your Password"
-                            floatingLabelText="Password"
-                            onChange = {(event,newValue) => this.setState({password:newValue})}
-                        />
+                    <TextField
+                        type="password"
+                        hintText="Enter your Password"
+                        floatingLabelText="Password"
+                        onChange = {(event,newValue) => this.setState({password:newValue})}
+                    />
                     <br/>
                     <RaisedButton label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
                 </div>
@@ -101,4 +133,4 @@ export default Login;
   </div>
 </div>
 
-*/
+*/  

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import "../App.css";
-import Login from "./Login";
-import { fetchUser } from "../services";
+import "../../App.css";
+import Login from "../Login";
+import { fetchUser } from "../../services";
 
 class AdminHome extends Component {
   constructor(props) {
@@ -20,11 +20,9 @@ class AdminHome extends Component {
     };
   }
 
-  async componentDidMount() {
-    const user = await fetchUser();
-    this.setState({
-      user
-    });
+  componentDidMount() {
+    this.props.getUser();
+    this.props.getSensores();
   }
   handleChange = e => {
     const name = e.target.name;
@@ -35,9 +33,9 @@ class AdminHome extends Component {
     this.props.handleChange(name, value);
   };
   render() {
-    if (!this.state.user) return <p>loading</p>;
+    if (!this.props.user && !this.props.sensores) return <p>loading</p>;
     else {
-      console.log(this.state.user);
+      console.log(this.props.sensores);
       return (
         <div>
           <div className="container-all">

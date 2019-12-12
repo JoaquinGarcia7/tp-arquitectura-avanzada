@@ -9,7 +9,7 @@ import {
   Route
 } from "react-router-dom";
 import UserHome from "./components/User";
-import AdminHome from "./components/AdminHome";
+import AdminHome from "./components/AdminHome/container";
 import socketIOClient from "socket.io-client";
 
 class App extends Component {

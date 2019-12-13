@@ -1,5 +1,5 @@
 import AdminHome from "./AdminHome";
-import { getUser, getSensores } from "../../actions/actions";
+import { getUser, getSensores, updateSensor } from "../../actions/actions";
 
 import { connect } from "react-redux";
 
@@ -10,4 +10,6 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { getUser, getSensores })(AdminHome);
+export default connect(mapStateToProps, { getUser, getSensores, updateSensor })(
+  AdminHome
+);

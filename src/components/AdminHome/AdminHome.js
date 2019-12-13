@@ -2,10 +2,20 @@ import React, { Component } from "react";
 import "../../App.css";
 import Login from "../Login";
 import { fetchUser } from "../../services";
+import {
+  Segment,
+  Dimmer,
+  Loader,
+  Input,
+  Button,
+  Form
+} from "semantic-ui-react";
+import "./styles.css";
 
 class AdminHome extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       tempMin: 0,
       tempMax: 0,
@@ -16,13 +26,16 @@ class AdminHome extends Component {
       coefT: 0,
       coefH: 0,
       coefV: 0,
-      user: null
+      user: null,
+      sensorTemperatura: null,
+      sensorHumedad: null,
+      sensorViento: null
     };
   }
 
   componentDidMount() {
-    this.props.getUser();
-    this.props.getSensores();
+    //this.props.getUser();
+    //this.props.getSensores();
   }
   handleChange = e => {
     const name = e.target.name;
@@ -32,128 +45,182 @@ class AdminHome extends Component {
     });
     this.props.handleChange(name, value);
   };
+
+  renderLoader = () => (
+    <Segment>
+      <Dimmer>
+        <Loader>Loading</Loader>
+      </Dimmer>
+    </Segment>
+  );
+
+  actualizarValores = sensor => {
+    this.props.updateSensor(sensor);
+  };
   render() {
-    if (!this.props.user && !this.props.sensores) return <p>loading</p>;
+    if (!this.props.user && !this.props.sensores) return this.renderLoader();
     else {
-      console.log(this.props.sensores);
+      const sensorTemperatura = this.props.sensores.find(
+        sensor => sensor.name_sensor === "temperatura"
+      );
+      const sensorHumedad = this.props.sensores.find(
+        sensor => sensor.name_sensor === "humedad"
+      );
+      const sensorViento = this.props.sensores.find(
+        sensor => sensor.name_sensor === "viento"
+      );
       return (
         <div>
           <div className="container-all">
-            <div className="container">
-              <p>Temperatura</p>
-              <label>
-                Valor minimo
-                <input
-                  type="text"
-                  value={this.state.tempMin}
-                  className="input-container"
-                  name="tempMin"
-                  onChange={this.handleChange}
-                />
-              </label>
-              <label>
-                Valor maximo
-                <input
-                  type="text"
-                  value={this.state.tempMax}
-                  className="input-container"
-                  name="tempMax"
-                  onChange={this.handleChange}
-                />
-              </label>
-              <label>
-                Coeficiente de conversion
-                <input
-                  type="text"
-                  value={this.state.coefT}
-                  className="input-container"
-                  name="coefT"
-                  onChange={this.handleChange}
-                />
-              </label>
-              <label>
-                Desactivar
-                <input name="isGoing" type="checkbox" />
-              </label>
+            <div className="container-form">
+              <Form
+                className="form-sensor"
+                onSubmit={() => this.actualizarValores(sensorTemperatura)}
+              >
+                <p>Temperatura</p>
+                <Form.Field>
+                  Valor minimo
+                  <Input
+                    type="text"
+                    defaultValue={sensorTemperatura.min_value}
+                    className="input-container"
+                    name="tempMin"
+                    onChange={(e, data) =>
+                      (sensorTemperatura.min_value = parseInt(data.value))
+                    }
+                  />
+                </Form.Field>
+                <Form.Field>
+                  Valor maximo
+                  <input
+                    type="text"
+                    defaultValue={sensorTemperatura.max_value}
+                    className="input-container"
+                    name="tempMax"
+                    onChange={(e, data) =>
+                      (sensorTemperatura.max_value = parseInt(data.value))
+                    }
+                  />
+                </Form.Field>
+                <Form.Field>
+                  Coeficiente de conversion
+                  <input
+                    type="text"
+                    defaultValue={sensorTemperatura.factor}
+                    className="input-container"
+                    name="coefT"
+                    onChange={(e, data) =>
+                      (sensorTemperatura.factor = parseInt(data.value))
+                    }
+                  />
+                </Form.Field>
+
+                <label>
+                  Desactivar
+                  <input name="isGoing" type="checkbox" />
+                </label>
+                <Button type="submit">Guardar</Button>
+              </Form>
             </div>
-            <div className="container">
-              <p>Humedad</p>
-              <label>
-                Valor minimo
-                <input
-                  type="text"
-                  value={this.state.humMin}
-                  className="input-container"
-                  name="humMin"
-                  onChange={this.handleChange}
-                />
-              </label>
-              <label>
-                Valor maximo
-                <input
-                  type="text"
-                  value={this.state.humMax}
-                  className="input-container"
-                  name="humMax"
-                  onChange={this.handleChange}
-                />
-              </label>
-              <label>
-                Coeficiente de conversion
-                <input
-                  type="text"
-                  value={this.state.coefH}
-                  className="input-container"
-                  name="coefH"
-                  onChange={this.handleChange}
-                />
-              </label>
-              <label>
-                Desactivar
-                <input name="isGoing" type="checkbox" />
-              </label>
+            <div className="container-form">
+              <Form
+                className="form-sensor"
+                onSubmit={() => this.actualizarValores(sensorHumedad)}
+              >
+                <p>Humedad</p>
+                <Form.Field>
+                  Valor minimo
+                  <Input
+                    type="text"
+                    defaultValue={sensorHumedad.min_value}
+                    className="input-container"
+                    name="humMin"
+                    onChange={(e, data) =>
+                      (sensorHumedad.min_value = parseInt(data.value))
+                    }
+                  />
+                </Form.Field>
+                <Form.Field>
+                  Valor maximo
+                  <input
+                    type="text"
+                    defaultValue={sensorHumedad.max_value}
+                    className="input-container"
+                    name="humMax"
+                    onChange={(e, data) =>
+                      (sensorHumedad.max_value = parseInt(data.value))
+                    }
+                  />
+                </Form.Field>
+                <Form.Field>
+                  Coeficiente de conversion
+                  <input
+                    type="text"
+                    defaultValue={sensorHumedad.factor}
+                    className="input-container"
+                    name="coefH"
+                    onChange={(e, data) =>
+                      (sensorHumedad.factor = parseInt(data.value))
+                    }
+                  />
+                </Form.Field>
+
+                <label>
+                  Desactivar
+                  <input name="isGoing" type="checkbox" />
+                </label>
+                <Button type="submit">Guardar</Button>
+              </Form>
             </div>
-            <div className="container">
-              <p>Velocidad del viento</p>
-              <label>
-                Valor minimo
-                <input
-                  type="text"
-                  value={this.state.vientoMin}
-                  className="input-container"
-                  name="vientoMin"
-                  onChange={this.handleChange}
-                />
-              </label>
-              <label>
-                Valor maximo
-                <input
-                  type="text"
-                  value={this.state.vientoMax}
-                  className="input-container"
-                  name="vientoMax"
-                  onChange={this.handleChange}
-                />
-              </label>
-              <label>
-                Coeficiente de conversion
-                <input
-                  type="text"
-                  value={this.state.coefV}
-                  className="input-container"
-                  name="coefV"
-                  onChange={this.handleChange}
-                />
-              </label>
-              <label>
-                Desactivar
-                <input name="isGoing" type="checkbox" />
-              </label>
+            <div className="container-form">
+              <Form
+                className="form-sensor"
+                onSubmit={() => this.actualizarValores(sensorViento)}
+              >
+                <p>Viento</p>
+                <Form.Field>
+                  Valor minimo
+                  <Input
+                    type="text"
+                    defaultValue={sensorViento.min_value}
+                    className="input-container"
+                    name="vientoMin"
+                    onChange={(e, data) =>
+                      (sensorViento.min_value = parseInt(data.value))
+                    }
+                  />
+                </Form.Field>
+                <Form.Field>
+                  Valor maximo
+                  <input
+                    type="text"
+                    defaultValue={sensorViento.max_value}
+                    className="input-container"
+                    name="vientoMax"
+                    onChange={(e, data) =>
+                      (sensorViento.max_value = parseInt(data.value))
+                    }
+                  />
+                </Form.Field>
+                <Form.Field>
+                  Coeficiente de conversion
+                  <input
+                    type="text"
+                    defaultValue={sensorViento.factor}
+                    className="input-container"
+                    name="coefV"
+                    onChange={(e, data) =>
+                      (sensorViento.factor = parseInt(data.value))
+                    }
+                  />
+                </Form.Field>
+                <label>
+                  Desactivar
+                  <input name="isGoing" type="checkbox" />
+                </label>
+                <Button type="submit">Guardar</Button>
+              </Form>
             </div>
-          </div>
-          <div>
-            <p>Mail</p>
-            <input type="text" />
           </div>
         </div>
       );

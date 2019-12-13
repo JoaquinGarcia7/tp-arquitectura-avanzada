@@ -8,9 +8,11 @@ import {
   Redirect,
   Route
 } from "react-router-dom";
-import UserHome from "./components/User";
+import UserHome from "./components/UserHome/container";
 import AdminHome from "./components/AdminHome/container";
 import socketIOClient from "socket.io-client";
+import { getUser, getSensores } from "./actions/actions";
+import { connect } from "react-redux";
 
 class App extends Component {
   constructor(props) {
@@ -40,9 +42,9 @@ class App extends Component {
     socket.on("arduinodata", data => {
       console.log(data.Temperatura);
       this.setState({
-        temperatura: data.Temperatura * coefT,
-        humedad: data.Humedad * coefH,
-        viento: data.Viento * coefV
+        temperatura: data.Temperatura,
+        humedad: data.Humedad,
+        viento: data.Viento
       });
     });
     /*try {
@@ -56,6 +58,7 @@ class App extends Component {
     } catch (error) {
       console.log(error);
     }*/
+    this.props.getSensores();
   }
 
   handleChange = (name, value) => {
@@ -65,7 +68,6 @@ class App extends Component {
   };
   render() {
     const { temperatura, humedad, viento } = this.state;
-    console.log(this.state.sensor);
     return (
       <div className="App">
         <Router>
@@ -93,4 +95,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(null, { getUser, getSensores })(App);

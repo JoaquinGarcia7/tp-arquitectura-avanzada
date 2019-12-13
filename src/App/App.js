@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import Login from "./components/Login";
+import Login from "../Login";
 import {
   BrowserRouter as Router,
   Switch,
   Redirect,
   Route
 } from "react-router-dom";
-import UserHome from "./components/User";
-import AdminHome from "./components/AdminHome";
+import UserHome from "../components/User";
+import AdminHome from "./components/AdminHome/container";
 import socketIOClient from "socket.io-client";
 
 class App extends Component {
@@ -28,7 +28,8 @@ class App extends Component {
       vientoMax: 0,
       coefT: 0.445,
       coefH: 0.2,
-      coefV: 0.1
+      coefV: 0.1,
+      sensor: []
     };
   }
 
@@ -44,14 +45,28 @@ class App extends Component {
         viento: data.Viento * coefV
       });
     });
+    /*try {
+      const sensor = await fetch("/");
+      console.log(sensor);
+      const r = JSON.stringify(sensor.body);
+      console.log(JSON.parse(r));
+      //console.log(JSON.parse(sensor));
+      //let sensor = await r.json();
+      //this.setState({ sensor });
+    } catch (error) {
+      console.log(error);
+    }*/
   }
+
   handleChange = (name, value) => {
     this.setState({
-      [name]: value
+    [name]: value
     });
   };
+  
   render() {
     const { temperatura, humedad, viento } = this.state;
+    console.log(this.state.sensor);
     return (
       <div className="App">
         <Router>

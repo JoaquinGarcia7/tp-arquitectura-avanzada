@@ -1,7 +1,7 @@
 import { GET_USER, GET_SENSORES } from "./actions/types";
 const initialState = {
-  user: [],
-  sensores: []
+  user: null,
+  sensores: null
 };
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {

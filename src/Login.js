@@ -12,7 +12,7 @@ class Login extends Component {
     }
 }
 
-handleClick(event){
+handleClick = e => {
     var apiBaseUrl = "http://localhost:4000/api/";
     var self = this;
     var payload={
@@ -40,7 +40,7 @@ handleClick(event){
     .catch(function (error) {
     console.log(error);
     });
-}
+};
 
 
 

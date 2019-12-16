@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import Login from "./components/Login";
+import Login from "./login";
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,7 +11,10 @@ import {
 import UserHome from "./components/UserHome/container";
 import AdminHome from "./components/AdminHome/container";
 import socketIOClient from "socket.io-client";
-import { getUser, getSensores } from "./actions/actions";
+import {
+  getUser,
+  getSensores 
+} from "./actions/actions";
 import { connect } from "react-redux";
 
 class App extends Component {
@@ -66,12 +69,14 @@ class App extends Component {
       [name]: value
     });
   };
+
   render() {
     const { temperatura, humedad, viento } = this.state;
     return (
       <div className="App">
         <Router>
           <Switch>
+
             <Route exact path="/">
               <Login />
             </Route>

@@ -1,75 +1,112 @@
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
+import React, { Component } from "react";
+import { Button, Form } from "semantic-ui-react";
+import { withRouter } from 'react-router-dom';
+import { object } from 'prop-types';
+
 class Login extends Component {
-    constructor(props){
-        super(props);
-        this.state={
-            username:'',
-            password:''
-        }
-    }
-}
 
-handleClick = e => {
-    var apiBaseUrl = "http://localhost:4000/api/";
-    var self = this;
-    var payload={
-        "email":this.state.username,
-        "password":this.state.password
-    }
-    axios.post(apiBaseUrl+'login', payload)
-    .then(function (response) {
-    console.log(response);
-    if(response.data.code == 200){
-        console.log("Login successfull");
-    var uploadScreen=[];
-    uploadScreen.push(<UploadScreen appContext={self.props.appContext}/>)
-    self.props.appContext.setState({loginPage:[],uploadScreen:uploadScreen})
-    }
-    else if(response.data.code == 204){
-        console.log("Username password do not match");
-        alert("username password do not match")
-    }
-    else{
-        console.log("Username does not exists");
-        alert("Username does not exist");
-    }
-    })
-    .catch(function (error) {
-    console.log(error);
+  static propTypes = {
+    history: object
+  }
+
+  constructor(props) {
+    super(props);
+    //Restablecer el estado de inicio de sesión.
+    //this.props.logout();
+
+    this.state = {
+      password: null,
+      submitted: false,
+      username: null
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange = event => {
+    //const { name, value } = e.target;
+    const name = event.target.name;
+    const value = event.target.value;
+    this.setState({
+      [name]: value
     });
-};
+  };
 
+  handleSubmit = event => {
+    event.preventDefault();
+    //this.props.login(this.state);
+    this.setState({ submitted: true });
+    const { username, password } = this.state;
+    /*if (username && password) {
+        this.props.login(username, password);
+    }*/
+  };
 
+  handleRedirect = () => {
+    const { history: { push } } = this.props;
+    push('/admin-home');
+  }
 
-render() {
+  handleRedirectUser = () => {
+    const { history: { push } } = this.props;
+    push('/user-home');
+  }
+
+  render() {
+    const { loggingIn } = this.props;
+    const { username, password, submitted } = this.state;
     return (
-        <div>
-            <MuiThemeProvider>
-                <div>
-                    <AppBar title="Login" />
-                    <TextField
-                        hintText="Enter your Username"
-                        floatingLabelText="Username"
-                        onChange = {(event,newValue) => this.setState({username:newValue})}
-                    />
-                    <br/>
-                        <TextField
-                            type="password"
-                            hintText="Enter your Password"
-                            floatingLabelText="Password"
-                            onChange = {(event,newValue) => this.setState({password:newValue})}
-                        />
-                    <br/>
-                    <RaisedButton label="Submit" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
-                </div>
-            </MuiThemeProvider>
-        </div>
+      <Form className="form-login" onSubmit={this.handleSubmit}>
+        <h1>Administrador</h1>
+          <div className={ 'form-group' + (submitted && !username ? ' has-error' : '') }>
+            <Form.Field>
+              <label className="label-form"> Usuario </label>
+              <Form.Input
+                type="text"
+                placeholder="Email"
+                onChange={this.handleChange}
+                name="username"
+                value={username}
+                required
+              />
+              {submitted && !username && 
+                <div className="help-block">Nombre de usuario requerido</div>
+              }
+            </Form.Field>
+          </div>
+          <div className={ 'form-group' + (submitted && !password ? ' has-error' : '') }> 
+            <Form.Field>
+              <label className="label-form"> Contraseña </label>
+              <Form.Input
+                type="password"
+                placeholder="password"
+                onChange={this.handleChange}
+                name="password"
+                value={password}
+                required
+              />
+              {submitted && !password &&
+                <div className="help-block">Contraseña requerida</div>
+              }
+            </Form.Field>
+          </div>
+
+          <div className="form-group">
+            <br/>
+            <Button className="btn btn-primary" type="submit" onClick={ () => this.handleRedirect() }>
+              Iniciar sesion
+            </Button>
+          </div>
+          <br/>
+          <div className="User">
+            <button className="btn" onClick={ () => this.handleRedirectUser() }>
+              Soy un usuario
+            </button>
+          </div>
+
+      </Form>
     );
+  }
 }
-const style = {
-    margin: 15,
-};
-export default Login;
+
+export default withRouter(Login);

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../../App.css";
-import Login from "../Login";
+import Login from "../../login";
 import { fetchUser } from "../../services";
 import {
   Segment,
@@ -11,6 +11,7 @@ import {
   Form
 } from "semantic-ui-react";
 import "./styles.css";
+
 
 class AdminHome extends Component {
   constructor(props) {

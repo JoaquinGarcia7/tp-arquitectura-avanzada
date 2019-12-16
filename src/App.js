@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from 'axios';
 import logo from "./logo.svg";
 import "./App.css";
 import Login from "./login";
@@ -16,6 +17,10 @@ import {
   getSensores 
 } from "./actions/actions";
 import { connect } from "react-redux";
+
+const axiosInstance = axios.create({
+  baseURL: 'localhost:4000'
+});
 
 class App extends Component {
   constructor(props) {
@@ -38,7 +43,7 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
     const { endpoint } = this.state;
     const socket = socketIOClient(endpoint);
     const { coefT, coefH, coefV } = this.state;
@@ -50,9 +55,9 @@ class App extends Component {
         viento: data.Viento
       });
     });
-    /*try {
-      const sensor = await fetch("/");
-      console.log(sensor);
+    try {
+      const sensor = await axiosInstance.get("/sensores");
+      console.log('sensores:', sensor);
       const r = JSON.stringify(sensor.body);
       console.log(JSON.parse(r));
       //console.log(JSON.parse(sensor));
@@ -60,7 +65,7 @@ class App extends Component {
       //this.setState({ sensor });
     } catch (error) {
       console.log(error);
-    }*/
+    }
     this.props.getSensores();
   }
 

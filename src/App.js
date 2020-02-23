@@ -1,17 +1,18 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import Login from "../Login";
+import Login from "./components/Login";
 import {
   BrowserRouter as Router,
   Switch,
   Redirect,
   Route
 } from "react-router-dom";
-import UserHome from "../components/User";
+import UserHome from "./components/User";
 import AdminHome from "./components/AdminHome/container";
 import socketIOClient from "socket.io-client";
 
+/*Probando git */
 class App extends Component {
   constructor(props) {
     super(props);

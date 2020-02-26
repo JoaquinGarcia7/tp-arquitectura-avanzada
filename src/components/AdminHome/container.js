@@ -1,6 +1,5 @@
-import AdminHome from "./AdminHome";
+import AdminHome from "./adminHome";
 import { getUser, getSensores } from "../../actions/actions";
-
 import { connect } from "react-redux";
 
 const mapStateToProps = state => {

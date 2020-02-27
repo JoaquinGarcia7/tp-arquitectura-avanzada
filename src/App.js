@@ -11,8 +11,9 @@ import {
 import UserHome from "./components/UserHome/container";
 import AdminHome from "./components/AdminHome/container";
 import socketIOClient from "socket.io-client";
-import { getUser, getSensores } from "./actions/actions";
+import { getUser, getSensores, setSendTrue } from "./actions/actions";
 import { connect } from "react-redux";
+import io from "socket.io-client";
 
 class App extends Component {
   constructor(props) {
@@ -28,36 +29,23 @@ class App extends Component {
       humMax: 0,
       vientoMin: 0,
       vientoMax: 0,
-      coefT: 0.445,
-      coefH: 0.2,
-      coefV: 0.1,
+
       sensor: []
     };
+    this.socket = socketIOClient(this.state.endpoint);
   }
 
   componentDidMount() {
     const { endpoint } = this.state;
-    const socket = socketIOClient(endpoint);
-    const { coefT, coefH, coefV } = this.state;
-    socket.on("arduinodata", data => {
-      console.log(data.Temperatura);
+    //const socket = socketIOClient(endpoint);
+    const { temperatura, humedad, viento } = this.state;
+    this.socket.on("arduinodata", data => {
       this.setState({
         temperatura: data.Temperatura,
         humedad: data.Humedad,
         viento: data.Viento
       });
     });
-    /*try {
-      const sensor = await fetch("/");
-      console.log(sensor);
-      const r = JSON.stringify(sensor.body);
-      console.log(JSON.parse(r));
-      //console.log(JSON.parse(sensor));
-      //let sensor = await r.json();
-      //this.setState({ sensor });
-    } catch (error) {
-      console.log(error);
-    }*/
     this.props.getSensores();
   }
 
@@ -66,8 +54,23 @@ class App extends Component {
       [name]: value
     });
   };
+
+  sendMail = sensor => {
+    if (!this.props.sentMessage) {
+      var socket = io(this.state.endpoint);
+      console.log("send");
+      //this.socket.on("sendemail", "temperatura");
+      this.props.setSendTrue(sensor);
+      socket.on("connect", function() {
+        socket.emit("sendemail", sensor, function(data) {
+          console.log(data); // data will be 'tobi says woot'
+        });
+      });
+    }
+  };
   render() {
     const { temperatura, humedad, viento } = this.state;
+
     return (
       <div className="App">
         <Router>
@@ -83,6 +86,8 @@ class App extends Component {
                 temperatura={temperatura}
                 viento={viento}
                 humedad={humedad}
+                endpoint={this.state.endpoint}
+                sendMail={this.sendMail}
               />
             </Route>
             <Route path="/admin-home">
@@ -95,4 +100,12 @@ class App extends Component {
   }
 }
 
-export default connect(null, { getUser, getSensores })(App);
+const mapStateToProps = state => {
+  return {
+    sentMessage: state.sentMessage
+  };
+};
+
+export default connect(mapStateToProps, { getUser, getSensores, setSendTrue })(
+  App
+);

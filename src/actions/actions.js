@@ -1,4 +1,12 @@
-import { GET_USER, GET_SENSORES, UPDATE_SENSOR } from "./types";
+import {
+  GET_USER,
+  GET_SENSORES,
+  UPDATE_SENSOR,
+  SAVE_REGISTRO_SENSOR,
+  GET_REGISTRO,
+  GET_REGISTRO_IN_PROGRESS,
+  SET_SEND_TRUE
+} from "./types";
 import axios from "axios";
 
 export const getUser = () => async dispatch => {
@@ -26,7 +34,6 @@ export const getSensores = () => async dispatch => {
 };
 
 export const updateSensor = sensor => async dispatch => {
-  console.log(sensor);
   try {
     const res = await axios.put(
       `http://localhost:3000/sensores/${sensor.id}`,
@@ -39,4 +46,42 @@ export const updateSensor = sensor => async dispatch => {
   } catch (e) {
     console.error(e);
   }
+};
+
+export const guardarRegistro = payload => async dispatch => {
+  try {
+    const { data } = await axios.post(
+      `http://localhost:3000/registro`,
+      payload
+    );
+    dispatch({
+      type: SAVE_REGISTRO_SENSOR,
+      payload: { sensor: data.data.id_sensor, value: data.data.valueSensor }
+    });
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const getRegistro = payload => async dispatch => {
+  dispatch({
+    type: GET_REGISTRO_IN_PROGRESS
+  });
+  try {
+    const res = await axios.get(
+      `http://localhost:3000/registro/${payload.fechaMin}/${payload.fechaMax}`
+    );
+    dispatch({
+      type: GET_REGISTRO,
+      payload: res.data
+    });
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const setSendTrue = () => async dispatch => {
+  dispatch({
+    type: SET_SEND_TRUE
+  });
 };

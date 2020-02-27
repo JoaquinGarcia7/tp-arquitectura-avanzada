@@ -15,7 +15,6 @@ import "./styles.css";
 class AdminHome extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       tempMin: 0,
       tempMax: 0,
@@ -69,6 +68,7 @@ class AdminHome extends Component {
       const sensorViento = this.props.sensores.find(
         sensor => sensor.name_sensor === "viento"
       );
+      console.log(sensorTemperatura);
       return (
         <div>
           <div className="container-all">

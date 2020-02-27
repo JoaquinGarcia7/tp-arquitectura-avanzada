@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "../../App.css";
-import Login from "../../login";
 import chart from "../chart";
 import {
   Segment,

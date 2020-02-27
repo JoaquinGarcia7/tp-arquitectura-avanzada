@@ -44,28 +44,16 @@ class UserHome extends Component {
     fechaMax
   ) => {
     e.preventDefault();
-    console.log("descargar");
     await this.props.getRegistro({ fechaMin, fechaMax });
-    console.log(this.props.registro);
     const registro = this.props.registro;
     var contenido = "";
     registro.map(item => {
       contenido += `${
         item.id_sensor
-      }: ${item.valueSensor.toString()} °C, Fecha: ${item.fecha}, Horario: ${
+        }: ${item.valueSensor.toString()} °C, Fecha: ${item.fecha}, Horario: ${
         item.horario
-      } \n`;
+        } \n`;
     });
-    /*if (temp !== -999)
-      //setear temp en -999 si el admin lo deshabilito
-      contenido += "Temperatura:   " + temp.toString() + " °C \n";
-    if (viento !== -999)
-      //setear viento en -999 si el admin lo deshabilito
-      contenido += "Viento:   " + viento.toString() + " Km/h \n";
-    if (humedad !== -999)
-      //setear viento en -999 si el admin lo deshabilito
-      contenido += "Humedad:   " + humedad.toString() + " % \n";*/
-    console.log(contenido);
     if (!contenido.trim())
       contenido = "Los sensores estan desactivados, no se registraron valores";
 
@@ -119,9 +107,6 @@ class UserHome extends Component {
   render() {
     const {
       sensores,
-      tempAnt,
-      humedadAnt,
-      vientoAnt,
       user,
       registroInProgress
     } = this.props;
@@ -141,7 +126,7 @@ class UserHome extends Component {
       );
       const humedad = Math.round(this.props.humedad * sensorHumedad.factor);
       const viento = Math.round(this.props.viento * sensorViento.factor);
-      //this.saveRegistro(temperatura, humedad, viento);
+      this.saveRegistro(temperatura, humedad, viento);
       if (temperatura > sensorTemperatura.max_value)
         this.props.sendMail("temperatura");
       return (

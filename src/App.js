@@ -1,7 +1,8 @@
 import React, { Component } from "react";
+import axios from "axios";
 import logo from "./logo.svg";
 import "./App.css";
-import Login from "./components/Login";
+import Login from "./login";
 import {
   BrowserRouter as Router,
   Switch,
@@ -14,6 +15,10 @@ import socketIOClient from "socket.io-client";
 import { getUser, getSensores, setSendTrue } from "./actions/actions";
 import { connect } from "react-redux";
 import io from "socket.io-client";
+
+const axiosInstance = axios.create({
+  baseURL: "localhost:4000"
+});
 
 class App extends Component {
   constructor(props) {
@@ -35,7 +40,7 @@ class App extends Component {
     this.socket = socketIOClient(this.state.endpoint);
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
     const { endpoint } = this.state;
     //const socket = socketIOClient(endpoint);
     const { temperatura, humedad, viento } = this.state;
@@ -47,7 +52,7 @@ class App extends Component {
       });
     });
     this.props.getSensores();
-  }
+  };
 
   handleChange = (name, value) => {
     this.setState({

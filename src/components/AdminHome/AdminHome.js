@@ -66,7 +66,7 @@ class AdminHome extends Component {
       const sensorViento = this.props.sensores.find(
         sensor => sensor.name_sensor === "viento"
       );
-      console.log(sensorTemperatura);
+      const { estadoTemp, estadoHum, estadoViento } = this.props;
       return (
         <div>
           <div className="container-all">
@@ -84,7 +84,7 @@ class AdminHome extends Component {
                     className="input-container"
                     name="tempMin"
                     onChange={(e, data) =>
-                      (sensorTemperatura.min_value = parseInt(data.value))
+                      (sensorTemperatura.min_value = parseInt(e.target.value))
                     }
                   />
                 </Form.Field>
@@ -95,8 +95,9 @@ class AdminHome extends Component {
                     defaultValue={sensorTemperatura.max_value}
                     className="input-container"
                     name="tempMax"
-                    onChange={(e, data) =>
-                      (sensorTemperatura.max_value = parseInt(data.value))
+                    onChange={
+                      (e, data) =>
+                        (sensorTemperatura.max_value = parseInt(e.target.value))
                     }
                   />
                 </Form.Field>
@@ -108,14 +109,24 @@ class AdminHome extends Component {
                     className="input-container"
                     name="coefT"
                     onChange={(e, data) =>
-                      (sensorTemperatura.factor = parseInt(data.value))
+                      (sensorTemperatura.factor = e.target.value)
                     }
                   />
                 </Form.Field>
 
                 <label>
                   Desactivar
-                  <input name="isGoing" type="checkbox" />
+                  <input
+                    name="isGoing"
+                    type="checkbox"
+                    onChange={(e, data) =>
+                      this.props.saveEstadoSensor({
+                        sensor: "estadoTemp",
+                        estado: e.target.checked
+                      })
+                    }
+                    checked={estadoTemp}
+                  />
                 </label>
                 <Button type="submit">Guardar</Button>
               </Form>
@@ -134,7 +145,7 @@ class AdminHome extends Component {
                     className="input-container"
                     name="humMin"
                     onChange={(e, data) =>
-                      (sensorHumedad.min_value = parseInt(data.value))
+                      (sensorHumedad.min_value = parseInt(e.target.value))
                     }
                   />
                 </Form.Field>
@@ -146,7 +157,7 @@ class AdminHome extends Component {
                     className="input-container"
                     name="humMax"
                     onChange={(e, data) =>
-                      (sensorHumedad.max_value = parseInt(data.value))
+                      (sensorHumedad.max_value = parseInt(e.target.value))
                     }
                   />
                 </Form.Field>
@@ -158,14 +169,23 @@ class AdminHome extends Component {
                     className="input-container"
                     name="coefH"
                     onChange={(e, data) =>
-                      (sensorHumedad.factor = parseInt(data.value))
+                      (sensorHumedad.factor = e.target.value)
                     }
                   />
                 </Form.Field>
 
                 <label>
                   Desactivar
-                  <input name="isGoing" type="checkbox" />
+                  <input
+                    name="isGoing"
+                    type="checkbox"
+                    onChange={(e, data) =>
+                      this.props.saveEstadoSensor({
+                        sensor: "estadoHum",
+                        estado: e.target.checked
+                      })
+                    }
+                  />
                 </label>
                 <Button type="submit">Guardar</Button>
               </Form>
@@ -214,9 +234,20 @@ class AdminHome extends Component {
                 </Form.Field>
                 <label>
                   Desactivar
-                  <input name="isGoing" type="checkbox" />
+                  <input
+                    name="isGoing"
+                    type="checkbox"
+                    onChange={(e, data) =>
+                      this.props.saveEstadoSensor({
+                        sensor: "estadoViento",
+                        estado: e.target.checked
+                      })
+                    }
+                  />
                 </label>
-                <Button type="submit">Guardar</Button>
+                <Button type="submit">
+                  {this.props.saveSensorInProgress ? "Guardando" : "Guardar"}
+                </Button>
               </Form>
             </div>
           </div>

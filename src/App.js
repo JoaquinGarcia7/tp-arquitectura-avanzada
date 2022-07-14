@@ -63,8 +63,6 @@ class App extends Component {
   sendMail = sensor => {
     if (!this.props.sentMessage) {
       var socket = io(this.state.endpoint);
-      console.log("send");
-      //this.socket.on("sendemail", "temperatura");
       this.props.setSendTrue(sensor);
       socket.on("connect", function() {
         socket.emit("sendemail", sensor, function(data) {
@@ -75,7 +73,6 @@ class App extends Component {
   };
   render() {
     const { temperatura, humedad, viento } = this.state;
-
     return (
       <div className="App">
         <Router>

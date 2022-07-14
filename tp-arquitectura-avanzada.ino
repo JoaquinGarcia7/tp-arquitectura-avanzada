@@ -61,7 +61,7 @@ void loop() {
   root["Temperatura"] = data[0];
   root["Humedad"] = data[1];
   root["Viento"] = data[2];
-  delay(5000);
+  delay(1000);
 
   
   //Serial.println();

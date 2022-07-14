@@ -5,7 +5,10 @@ import {
   SAVE_REGISTRO_SENSOR,
   GET_REGISTRO,
   GET_REGISTRO_IN_PROGRESS,
-  SET_SEND_TRUE
+  SET_SEND_TRUE,
+  UPLOAD_SENSOR_INPROGRESS,
+  UPLOAD_SENSOR_FAILURE,
+  SAVE_ESTADO_SENSOR
 } from "./types";
 import axios from "axios";
 
@@ -34,6 +37,7 @@ export const getSensores = () => async dispatch => {
 };
 
 export const updateSensor = sensor => async dispatch => {
+  dispatch({ type: UPLOAD_SENSOR_INPROGRESS });
   try {
     const res = await axios.put(
       `http://localhost:3000/sensores/${sensor.id}`,
@@ -45,6 +49,7 @@ export const updateSensor = sensor => async dispatch => {
     });
   } catch (e) {
     console.error(e);
+    dispatch({ type: UPLOAD_SENSOR_FAILURE });
   }
 };
 
@@ -83,5 +88,13 @@ export const getRegistro = payload => async dispatch => {
 export const setSendTrue = () => async dispatch => {
   dispatch({
     type: SET_SEND_TRUE
+  });
+};
+
+export const saveEstadoSensor = payload => async dispatch => {
+  console.log(payload);
+  dispatch({
+    type: SAVE_ESTADO_SENSOR,
+    payload
   });
 };

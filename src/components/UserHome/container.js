@@ -17,7 +17,10 @@ const mapStateToProps = state => {
     registroInProgress: state.registroInProgress,
     temperaturaAnt: state.temperatura,
     vientoAnt: state.viento,
-    humedadAnt: state.humedad
+    humedadAnt: state.humedad,
+    estadoTemp: state.estadoTemp,
+    estadoHum: state.estadoHum,
+    estadoViento: state.estadoViento
   };
 };
 

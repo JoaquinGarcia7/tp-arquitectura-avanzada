@@ -59,7 +59,7 @@ io.on("descargar", contenido => {
 
 // Configuramos el horario de ENCENDIDO de luces //
 //min, hr
-cron.schedule("08 23 * * *", function() {
+cron.schedule("04 15 * * *", function() {
   port.write("LED91\n", err => {
     if (err) {
       return console.log("Error intentando escribir en puerto: ", err.message);
@@ -69,7 +69,7 @@ cron.schedule("08 23 * * *", function() {
 });
 // Configuramos el horario de APAGADO de luces //
 //minutos, horas
-cron.schedule("10 23 * * *", function() {
+cron.schedule("09 15 * * *", function() {
   port.write("LED90\n", err => {
     if (err) {
       return console.log("Error intentando escribir en puerto: ", err.message);
@@ -80,21 +80,48 @@ cron.schedule("10 23 * * *", function() {
 
 io.on("connection", function(socket) {
   socket.on("sendemail", function(sensor) {
-    let transporter = nodeMailer.createTransport({
-      host: "smtp.gmail.com",
+    /*let transporter = nodeMailer.createTransport({
+      host: 'smtp.gmail.com',
       port: 465,
       secure: true,
       auth: {
-        user: "mail_prueba@gmail.com", // email que se usa para enviar el correo
-        pass: "contraseña_prueba" //contraseña de ese email
+        user: 'mail_prueba@gmail.com', // email que se usa para enviar el correo
+        pass: '' //contraseña de ese email
       }
     });
     let mailOptions = {
-      from: '"Cristian Ferreyra" <mail_prueba@gmail.com>', //quien lo envio
-      to: "mail_prueba@gmail.com", //a quien lo envio
+      from: '"usuario prueba" <mail_prueba@gmail.com>', //quien lo envio
+      to: 'mail_prueba@gmail.com', //a quien lo envio
+      subject: 'alerta', //el asunto
+      text: `el sensor ${sensor} ha pasado los limites` //el contenido del mail
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log(error);
+      }
+      console.log("Message %s sent: %s", info.messageId, info.response);
+      res.render("index");
+    });*/
+    let transporter = nodeMailer.createTransport({
+      host: "smtp-mail.outlook.com",
+      secureConnection: false,
+      port: 587,
+      tls: {
+        ciphers: "SSLv3"
+      },
+      //secure: true,
+      auth: {
+        user: "finalarqav1@outlook.com", // email que se usa para enviar el correo
+        pass: "Final123" //contraseña de ese email
+      }
+    });
+    let mailOptions = {
+      from: '"usuario prueba" <finalarqav1@outlook.com>', //quien lo envio
+      to: "usuario_prueba@gmail.com", //a quien lo envio
       subject: "alerta", //el asunto
       text: `el sensor ${sensor} ha pasado los limites` //el contenido del mail
     };
+
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         return console.log(error);

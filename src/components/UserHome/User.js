@@ -50,9 +50,9 @@ class UserHome extends Component {
     registro.map(item => {
       contenido += `${
         item.id_sensor
-        }: ${item.valueSensor.toString()} °C, Fecha: ${item.fecha}, Horario: ${
+      }: ${item.valueSensor.toString()} °C, Fecha: ${item.fecha}, Horario: ${
         item.horario
-        } \n`;
+      } \n`;
     });
     if (!contenido.trim())
       contenido = "Los sensores estan desactivados, no se registraron valores";
@@ -108,7 +108,10 @@ class UserHome extends Component {
     const {
       sensores,
       user,
-      registroInProgress
+      registroInProgress,
+      estadoTemp,
+      estadoHum,
+      estadoViento
     } = this.props;
     if ((!user && !sensores) || registroInProgress) return this.renderLoader();
     else {
@@ -127,32 +130,42 @@ class UserHome extends Component {
       const humedad = Math.round(this.props.humedad * sensorHumedad.factor);
       const viento = Math.round(this.props.viento * sensorViento.factor);
       this.saveRegistro(temperatura, humedad, viento);
-      if (temperatura > sensorTemperatura.max_value)
+      if (
+        temperatura > sensorTemperatura.max_value ||
+        temperatura < sensorTemperatura.min_value
+      )
         this.props.sendMail("temperatura");
+      if (
+        humedad > sensorHumedad.max_value ||
+        humedad < sensorHumedad.min_value
+      )
+        this.props.sendMail("humedad");
+      if (viento > sensorViento.max_value || viento < sensorViento.min_value)
+        this.props.sendMail("viento");
       return (
         <div>
           <div className="container-all">
             <div className="container">
               <p>Temperatura</p>
               <div className="div-valor">
-                <p>{temperatura} ºC</p>
+                {estadoTemp ? <p>Desactivado</p> : <p>{temperatura} ºC</p>}
               </div>
-              {chart("Temperatura", temperatura)}
+              {estadoTemp ? null : chart("Temperatura", temperatura)}
             </div>
             <div className="container">
               <p>Humedad</p>
 
               <div className="div-valor">
-                <p>{humedad} %</p>
+                {estadoHum ? <p>Desactivado</p> : <p>{humedad} %</p>}
               </div>
-              {chart("Humedad", humedad)}
+              {estadoHum ? null : chart("Humedad", humedad)}
             </div>
             <div className="container">
               <p>Velocidad del viento</p>
               <div className="div-valor">
-                <p>{viento} km/h</p>
+                {estadoViento ? <p>Desactivado</p> : <p>{viento} km/h</p>}
               </div>
-              {chart("Viento", viento)}
+              {estadoViento ? null : chart("Viento", viento)}
             </div>
           </div>
           <div className="container-download">
